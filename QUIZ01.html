@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Quiz – Data Structures</title>
+
+<style>
+    body {
+        background: #081b33;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        width: 450px;
+        background: rgba(255,255,255,0.1);
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .question-box {
+        font-size: 22px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .option {
+        background: rgba(255,255,255,0.15);
+        padding: 12px;
+        border-radius: 10px;
+        margin: 10px 0;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .option:hover {
+        background: rgba(255,255,255,0.25);
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 12px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .submit-btn {
+        background: #0057ff;
+        color: white;
+    }
+
+    .hint-btn {
+        background: #00c8c8;
+        color: white;
+    }
+
+</style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>AI Learning Platform</h2>
+
+        <div id="questionText" class="question-box"></div>
+
+        <div id="optionsContainer"></div>
+
+        <button class="submit-btn" onclick="submitAnswer()">SUBMIT ANSWER</button>
+        <button class="hint-btn" onclick="showHint()">HINT</button>
+
+        <p id="result" style="margin-top:15px; font-size:18px;"></p>
+    </div>
+
+<script>
+
+let questions = [
+    {
+        q: "What is a Data Structure?",
+        options: [
+            "A way to store and organize data",
+            "A type of programming language",
+            "A hardware component",
+            "A security algorithm"
+        ],
+        correct: 0,
+        hint: "It organizes and manages data."
+    },
+    {
+        q: "What is the height of a tree?",
+        options: [
+            "Number of children",
+            "Longest path from root to leaf",
+            "Number of leaves",
+            "Depth of first node"
+        ],
+        correct: 1,
+        hint: "Think about depth levels."
+    },
+    {
+        q: "What does LIFO stand for?",
+        options: [
+            "Last In First Out",
+            "Least Input Fast Output",
+            "Logic In Function Output",
+            "Load In File Operation"
+        ],
+        correct: 0,
+        hint: "Used in stacks."
+    }
+];
+
+let index = 0;
+let selectedOption = null;
+
+function loadQuestion(){
+    document.getElementById("questionText").innerText = questions[index].q;
+
+    let container = document.getElementById("optionsContainer");
+    container.innerHTML = "";
+
+    questions[index].options.forEach((opt, i) => {
+        let div = document.createElement("div");
+        div.className = "option";
+        div.innerText = opt;
+
+        div.onclick = function(){
+            selectedOption = i;
+
+            document.querySelectorAll(".option").forEach(o => {
+                o.style.background = "rgba(255,255,255,0.15)";
+            });
+            div.style.background = "#0048ad";
+        };
+
+        container.appendChild(div);
+    });
+}
+
+function submitAnswer(){
+    if(selectedOption === null){
+        document.getElementById("result").innerText = "Please select an option!";
+        return;
+    }
+
+    if(selectedOption === questions[index].correct){
+        document.getElementById("result").innerText = "Correct! Moving to next question...";
+        index++;
+
+        if(index < questions.length){
+            setTimeout(() => {
+                selectedOption = null;
+                document.getElementById("result").innerText = "";
+                loadQuestion();
+            }, 1200);
+        } else {
+            document.getElementById("result").innerText = "Quiz Completed! 🎉";
+        }
+    } else {
+        document.getElementById("result").innerText = "Incorrect. Try again!";
+        }
+}
+
+function showHint(){
+    document.getElementById("result").innerText = "Hint: " + questions[index].hint;
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
